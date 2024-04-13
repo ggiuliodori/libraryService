@@ -3,6 +3,8 @@ package com.library.libraryService.controller;
 import com.library.libraryService.model.BookDTO;
 import com.library.libraryService.service.BookService;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,14 +17,15 @@ public class BookController {
     private BookService bookService;
 
     @GetMapping
-    public List<BookDTO> search(@RequestParam(required = false) String title,
-                                @RequestParam(required = false) String genre) {
+    public Page<BookDTO> search(@RequestParam(required = false) String title,
+                                @RequestParam(required = false) String genre,
+                                Pageable pageable) {
         if (title != null) {
-            return bookService.searchByTitle(title);
+            return bookService.searchByTitle(title, pageable);
         } else if (genre != null) {
-            return bookService.searchByGenre(genre);
+            return bookService.searchByGenre(genre, pageable);
         } else {
-            return bookService.listBooks();
+            return bookService.listBooks(pageable);
         }
     }
 

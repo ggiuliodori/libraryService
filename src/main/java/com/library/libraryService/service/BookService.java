@@ -5,6 +5,8 @@ import com.library.libraryService.parser.BookParser;
 import com.library.libraryService.repository.BookRepository;
 import com.library.libraryService.model.BookDTO;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -18,25 +20,19 @@ public class BookService {
 
     private BookParser bookParser;
 
-    public List<BookDTO> searchByTitle(String title) {
-        List<BookEntity> resultBookEntities = bookRepository.findByTitleContainingIgnoreCase(title);
-        List<BookDTO> resultBooksDTO = new ArrayList<>();
-        resultBookEntities.forEach(bookEntity -> resultBooksDTO.add(bookParser.toBookDTO(bookEntity)));
-        return resultBooksDTO;
+    public Page<BookDTO> searchByTitle(String title, Pageable pageable) {
+        Page<BookEntity> resultBookEntities = bookRepository.findByTitleContainingIgnoreCase(title, pageable);
+        return resultBookEntities.map(bookParser::toBookDTO);
     }
 
-    public List<BookDTO> searchByGenre(String genre) {
-        List<BookEntity> resultBookEntities = bookRepository.findByGenreContainingIgnoreCase(genre);
-        List<BookDTO> resultBooksDTO = new ArrayList<>();
-        resultBookEntities.forEach(bookEntity -> resultBooksDTO.add(bookParser.toBookDTO(bookEntity)));
-        return resultBooksDTO;
+    public Page<BookDTO> searchByGenre(String genre, Pageable pageable) {
+        Page<BookEntity> resultBookEntities = bookRepository.findByGenreContainingIgnoreCase(genre, pageable);
+        return resultBookEntities.map(bookParser::toBookDTO);
     }
 
-    public List<BookDTO> listBooks() {
-        List<BookEntity> resultBookEntities = bookRepository.findAll();
-        List<BookDTO> resultBooksDTO = new ArrayList<>();
-        resultBookEntities.forEach(bookEntity -> resultBooksDTO.add(bookParser.toBookDTO(bookEntity)));
-        return resultBooksDTO;
+    public Page<BookDTO> listBooks(Pageable pageable) {
+        Page<BookEntity> resultBookEntities = bookRepository.findAll(pageable);
+        return resultBookEntities.map(bookParser::toBookDTO);
     }
 
     public BookDTO saveBook(BookDTO bookDTO) {
