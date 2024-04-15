@@ -16,14 +16,26 @@ public class MemberController {
 
     private MemberService memberService;
 
+    @GetMapping
+    public Page<MemberDTO> search(@RequestParam(required = false) String lastname,
+                                @RequestParam(required = false) String dni,
+                                Pageable pageable) {
+        if (lastname != null) {
+            return memberService.searchByLastname(lastname, pageable);
+        } else if (dni != null) {
+            return memberService.searchByDni(dni, pageable);
+        } else {
+            return memberService.getAllMembers(pageable);
+        }
+    }
     @PostMapping
     public MemberDTO saveMember(@RequestBody MemberDTO memberDTO) {
         return memberService.saveMember(memberDTO);
     }
 
-    @GetMapping
-    public Page<MemberDTO> getAllMembers(Pageable pageable) {
-        return memberService.getAllMembers(pageable);
+    @PutMapping("/{id}")
+    public MemberDTO updateMember(@PathVariable String id, @RequestBody MemberDTO memberDTO) {
+        return memberService.updateMember(id, memberDTO);
     }
 }
 

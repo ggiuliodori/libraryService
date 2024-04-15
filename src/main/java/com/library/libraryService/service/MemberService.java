@@ -32,4 +32,27 @@ public class MemberService {
     public Page<MemberDTO> getAllMembers(Pageable pageable) {
         return memberRepository.findAll(pageable).map(memberParser::toMemberDTO);
     }
+
+    public MemberDTO updateMember(String id, MemberDTO memberDTO) {
+        MemberEntity existingMember = memberRepository.findById(id)
+            .orElseThrow(() -> new IllegalArgumentException("Member not found with the provided ID"));
+
+        existingMember.setName(memberDTO.getName());
+        existingMember.setLastname(memberDTO.getLastname());
+        existingMember.setDni(memberDTO.getDni());
+        existingMember.setEmail(memberDTO.getEmail());
+        existingMember.setBirthdate(memberDTO.getBirthdate());
+
+        return memberParser.toMemberDTO(memberRepository.save(existingMember));
+    }
+
+    public Page<MemberDTO> searchByLastname(String lastname, Pageable pageable) {
+        Page<MemberEntity> resultMemberEntities = memberRepository.findByLastnameContainingIgnoreCase(lastname, pageable);
+        return resultMemberEntities.map(memberParser::toMemberDTO);
+    }
+
+    public Page<MemberDTO> searchByDni(String dni, Pageable pageable) {
+        Page<MemberEntity> resultMemberEntities = memberRepository.findByDniContainingIgnoreCase(dni, pageable);
+        return resultMemberEntities.map(memberParser::toMemberDTO);
+    }
 }

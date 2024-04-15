@@ -1,6 +1,5 @@
 package com.library.libraryService.model;
 
-import jakarta.persistence.*;
 import lombok.Data;
 @Data
 public class MemberDTO {

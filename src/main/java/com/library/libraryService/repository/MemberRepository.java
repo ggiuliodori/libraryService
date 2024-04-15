@@ -9,4 +9,8 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface MemberRepository extends JpaRepository<MemberEntity, String> {
+
+    Page<MemberEntity> findByLastnameContainingIgnoreCase(String lastname, Pageable pageable);
+
+    Page<MemberEntity> findByDniContainingIgnoreCase(String dni, Pageable pageable);
 }
