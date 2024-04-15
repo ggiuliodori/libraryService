@@ -50,7 +50,10 @@ public class BookService {
 
         existingBook.setTitle(bookDTO.getTitle());
         existingBook.setAuthor(bookDTO.getAuthor());
+        existingBook.setEditorial(bookDTO.getEditorial());
+        existingBook.setPublicationDate(bookDTO.getPublicationDate());
         existingBook.setGenre(bookDTO.getGenre());
+        existingBook.setResume(bookDTO.getResume());
         existingBook.setCondition(bookDTO.getCondition());
         existingBook.setConditionDescription(bookDTO.getConditionDescription());
 
